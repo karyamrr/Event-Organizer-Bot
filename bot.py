@@ -2,6 +2,7 @@ import json
 import os
 from datetime import datetime, timedelta
 
+# Назва файлу для зберігання даних
 DATA_FILE = "events.json"
 
 def load_events():
@@ -27,6 +28,7 @@ def check_conflict(events, new_date, new_start_time, duration_min=60):
     for event in events:
         if event['date'] == new_date:
             exist_start = datetime.strptime(f"{event['date']} {event['time']}", "%Y-%m-%d %H:%M")
+            # Припустимо, що кожна подія триває 1 годину, якщо не вказано інше
             exist_end = exist_start + timedelta(minutes=60) 
             
             if (new_start < exist_end) and (new_end > exist_start):
@@ -42,6 +44,7 @@ def add_event(events):
     category = input("Категорія (лекція, зустріч, іспит тощо): ")
     
     try:
+        # Перевірка формату дати
         datetime.strptime(date_str, "%Y-%m-%d")
         datetime.strptime(time_str, "%H:%M")
         
@@ -71,6 +74,7 @@ def show_events(events_list, title="Список усіх подій"):
         return
     
     print(f"\n--- {title} ---")
+    # Сортування за датою та часом перед виводом
     sorted_events = sorted(events_list, key=lambda x: (x['date'], x['time']))
     for i, ev in enumerate(sorted_events, 1):
         print(f"{i}. [{ev['date']} {ev['time']}] {ev['name']} ({ev['category']})")
